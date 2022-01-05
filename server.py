@@ -17,25 +17,29 @@ async def main():
             print(req)
             string_list = req.split(' ')
             #method = string_list[0]
-            requested_page =  string_list[1]
-            print(f"client requested: {requested_page}")
+            if len(string_list) > 1:
+                requested_page = string_list[1]
+                print(f"client requested: {requested_page}")
 
-            page = requested_page.lstrip('/')
-            # setting the header according to the type of the asked content
-            if(page == ''):
-                type = 'text/html'
-                page = 'index.html'
-            elif(page == 'shutdown'):
-                #shutting down the server on call via breaking the loop
-                type = 'text/html'
-                page = 'shutdown.html'
+                page = requested_page.lstrip('/')
+                # setting the header according to the type of the asked content
+                if(page == ''):
+                    type = 'text/html'
+                    page = 'index.html'
+                elif(page == 'shutdown'):
+                    #shutting down the server on call via breaking the loop
+                    type = 'text/html'
+                    page = 'shutdown.html'
+                    await page_response(type, page)
+                    break
+                elif(page == 'favicon.ico'):
+                    type = 'image/x-icon'
+                else:
+                    page = page + ".html"
+                    type = 'text/html'
+
+                #response
                 await page_response(type, page)
-                break
-            elif(page == 'favicon.ico'):
-                type = 'image/x-icon'
-            
-            #response
-            await page_response(type, page)
 
 
 async def ens_connections(sock):
